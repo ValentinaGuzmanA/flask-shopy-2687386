@@ -11,37 +11,36 @@
     {{ mensaje }}
     </div>
     {% endfor%}
-    <h1>Lista de productos</h1>    
-    <a href ="/productos/create"
-        class= "btn btn-info">Nuevo producto</a>
+    <h1>Lista de Clientes </h1>    
+    <a href ="/clientes/cliente"
+        class= "btn btn-info">Nuevo Cliente</a>
 <table class="table table-hoover">
     <thead>
         <tr>
+                 
+            <th>id</th> 
             <th>nombre</th> 
-            <th>precio</th> 
-            <th>Imagen</th> 
-            <th>Actualizar</th> 
-            <th>Eliminar</th> 
+            <th>email</th>          
         </tr>
     </thead>
     <tbody>
-        {% for producto in productos %}
+        {% for cliente in clientes %}
             <tr>
-                <td>{{ producto.nombre }}</td>
-                <td>{{ producto.precio }}</td>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.username }}</td>
+                <td>{{ cliente.email }}</td>
+
                 <td>
-                    <img src="imagenes/{{producto.imagen}}"   alt=""  whidth="100" height="100">
-                </td>
-                <td>
-                    <a href="/productos/editar/{{producto.id}}">  
+                    <a href="/clientes/editar/{{cliente.id}}">  
                         Actualizar
                     </a>
                 </td>
                 <td>
-                    <a href="/productos/eliminar/{{producto.id}}">  
+                    <a href="/clientes/eliminar/{{cliente.id}}">  
                         Eliminar
                     </a>
                 </td>  
+
             </tr>
 
         {% endfor %}
