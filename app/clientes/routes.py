@@ -1,44 +1,61 @@
-from flask import render_template, redirect, flash
+from flask import render_template,redirect,flash
+from flask_login import login_required
 from app.clientes import clientes
 import app
-import os
-from .forms import NewClientForm, EditClientForm
+
+from .forms import ClienteForm,NewClienteForm,EditClienteForm
 
 
-@clientes.route('/create',methods=['GET', 'POST'])
-def creat():
+@clientes.route('/cliente', methods=['GET','POST'])
+def crear(): 
     p = app.models.Cliente()
-    form = NewClientForm()
+    form = NewClienteForm()
+    c=p
     if form.validate_on_submit():
+        #guardar en base de datos
         form.populate_obj(p)
+        c.set_password(form.password.data)
+        print(c)
         app.db.session.add(p)
-        app.db.session.commit()
-        flash("Cliente registrado correctamente")
+        app.db.session.commit()  
+        flash("cliente registrado correctamente")
         return redirect('/clientes/listar')
-    return render_template('new_clientes.html', 
-                            form = form)
-
+    return render_template('newCliente.html',
+                           form=form)
+    
 @clientes.route('/listar')
+@login_required
 def listar():
-    clientes =app.models.Cliente.query.all()
-    return render_template("list_clientes.html",
+     ## seleccionar los profuctos
+    clientes= app.models.Cliente.query.all() 
+    return render_template("listCliente.html", 
                             clientes = clientes)
-
-@clientes.route('/update/<cliente_id>', methods=['GET', 'POST'])
-def edit(cliente_id):
+       
+@clientes.route('/editar/<cliente_id>',methods=['GET','POST'])
+@login_required
+def editar (cliente_id):
     p = app.models.Cliente.query.get(cliente_id)
-    form = EditClientForm(obj=p)
+    form = EditClienteForm(obj = p)
     if form.validate_on_submit():
         form.populate_obj(p)
         app.db.session.commit()
-        flash("Cliente actualizado")
+        flash('cliente actualizado')
         return redirect('/clientes/listar')
-    return render_template('new_clientes.html', form=form)
-
-@clientes.route('/delete/<cliente_id>')
-def delete(cliente_id):
-    p=app.models.Cliente.query.get(cliente_id)
+    return render_template('new.html',
+                           form=form)    
+    
+ 
+ 
+@clientes.route('/eliminar/<cliente_id>')
+@login_required
+def eliminar (cliente_id):
+    p = app.models.Cliente.query.get(cliente_id)
     app.db.session.delete(p)
     app.db.session.commit()
-    flash("cliente eliminado")
+    flash('cliente eliminado')
     return redirect('/clientes/listar')
+
+
+    
+    
+    

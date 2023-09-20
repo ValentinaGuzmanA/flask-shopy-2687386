@@ -1,9 +1,9 @@
 from flask import Blueprint
 
 
-clientes = Blueprint('clientes',
+auth = Blueprint('auth',
                       __name__,
-                      url_prefix= '/clientes',
+                      url_prefix= '/auth',
                       template_folder= 'templates',
                     ) 
 
